@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route::get('/city/{id}', 'CityController@show');
+Auth::routes();
+
+Route::get('/city', 'CityController@index');
+//Route::get('/user', 'UserController@index');
+Route::resource('/user', 'UserController');
+Route::get('/home', 'HomeController@index')->name('home');
