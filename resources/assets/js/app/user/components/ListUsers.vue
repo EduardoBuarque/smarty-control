@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="user in users">
+                    <tr v-for="user in pagination.data">
                         <td>
                             <router-link to="/bar">{{ user.name }}</router-link>
                         </td>
@@ -36,28 +36,48 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="text-center">
+                <pagination :source="pagination" @navigate="navigate"></pagination>
+            </div>
         </div>
 
     </div>
 </template>
 
 <script>
+    import pagination from '../../../components/pagination.vue'
+
     export default {
         data: function () {
             return {
-                users: []
+                pagination: []
             }
         },
+        components: {
+            pagination
+        },
         created() {
-            this.$http.get('/user').then(response => {
+            this.getUsers();
+        },
+        methods: {
+            navigate (page) {
+                this.getUsers(page)
+            },
+            getUsers (page) {
+                let url = '/user'
+                if (page)
+                    url+= '?page='+page
 
-                this.users = response.data.data;
+                this.$http.get(url).then(response => {
 
-            }, response => {
+                    this.pagination = response.data;
 
-                console.log(response);
+                }, response => {
 
-            });
+                    console.log(response);
+
+                });
+            }
         }
     }
 </script>

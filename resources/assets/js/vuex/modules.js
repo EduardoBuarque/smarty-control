@@ -1,3 +1,3 @@
-import { vuex as user } from '../modeules/user'
+import { vuex as app } from '../app/index'
 
-export default { user }
+export default app

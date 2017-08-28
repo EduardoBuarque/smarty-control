@@ -1,8 +1,7 @@
-import { routes as user } from '../modeules/user'
-import { routes as client } from '../modeules/client'
+import { routes as app } from '../app/index'
 
 const root = [
     { path: '/', redirect: '/user' }
 ]
 
-export default [ ...root, ...user, ...client ]
+export default [ ...root, ...app ]
