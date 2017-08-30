@@ -1,6 +1,8 @@
 <template>
     <div class="panel panel-default">
-        <div class="panel-heading">Usuários</div>
+        <div class="panel-heading">Usuários
+            <slot name="panel-heading"></slot>
+        </div>
 
         <div class="panel-body">
             <table class="table table-hover table-striped">
@@ -15,7 +17,7 @@
                 <tbody>
                     <tr v-for="user in pagination.data">
                         <td>
-                            <router-link to="/bar">{{ user.name }}</router-link>
+                            <a href="#">{{ user.name }}</a>
                         </td>
                         <td>
                             {{ user.email }}
@@ -28,7 +30,7 @@
                             <a v-if="user.account_status" class="btn btn-default btn-success btn-xs">
                                 <i class="glyphicon glyphicon-ok"></i>
                             </a>
-                            <a v-else class="btn btn-default btn-danger btn-xs">
+                            <a v-else="" class="btn btn-default btn-danger btn-xs">
                                 <i class="glyphicon glyphicon-ban-circle"></i>
                             </a>
 
@@ -37,24 +39,25 @@
                 </tbody>
             </table>
             <div class="text-center">
-                <pagination :source="pagination" @navigate="navigate"></pagination>
+                <sc-pagination :source="pagination" @navigate="navigate"></sc-pagination>
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
-    import pagination from '../../../components/pagination.vue'
+    import ScPagination from '../../../components/sc-pagination'
+    import ScModal from '../../../components/sc-modal'
 
     export default {
         data: function () {
             return {
-                pagination: []
+                pagination: [],
             }
         },
         components: {
-            pagination
+            ScPagination,
+            ScModal
         },
         created() {
             this.getUsers();
@@ -64,20 +67,13 @@
                 this.getUsers(page)
             },
             getUsers (page) {
-                let url = '/user'
+                let url = '/users'
                 if (page)
                     url+= '?page='+page
 
-                this.$http.get(url).then(response => {
-
-                    this.pagination = response.data;
-
-                }, response => {
-
-                    console.log(response);
-
-                });
-            }
+                this.$http.get(url).then(response =>
+                    this.pagination = response.data);
+            },
         }
     }
 </script>

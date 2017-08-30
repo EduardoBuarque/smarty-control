@@ -17,24 +17,16 @@
         </ul>
     </nav>
 </template>
+
 <script>
     export default {
         props: ['source'],
-        data () {
-            return {
-                page: []
-            }
-        },
-        watch: {
-            source () {
-//                this.page =
-//                console.log(this.page)
-            }
-        },
         methods: {
             navigate (event, page) {
                 event.preventDefault()
+
                 if (page == 0 || page == this.source.last_page + 1) return
+
                 this.$emit('navigate', page)
             }
         }

@@ -19,10 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-//        return DB::table('users')->paginate(10);
-
          $users = User::with('profile')->paginate(10);
-//         return response()->json($users);
          return $users;
     }
 
@@ -44,7 +41,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//        return User::saved($request->all());
+        $user = new User();
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+
+        $user->password = bcrypt('12345*');
+
+        $user->profile_id = $request->get('profile_id');
+        $user->account_status = $request->get('account_status') ? 1 : 0;
+
+        $user->save();
     }
 
     /**
