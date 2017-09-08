@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Profile;
 
 class ProfilesTableSeeder extends Seeder
 {
@@ -11,12 +12,7 @@ class ProfilesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('profiles')->insert([
-            'name' => 'Administrador'
-        ]);
-
-        DB::table('profiles')->insert([
-            'name' => 'Funcionário'
-        ]);
+        Profile::create([ 'name' => 'Administrador' ]);
+        Profile::create([ 'name' => 'Funcionário' ]);
     }
 }

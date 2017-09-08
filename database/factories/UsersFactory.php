@@ -24,10 +24,3 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
-
-$factory->define(App\City::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->city,
-        'taxa' => $faker->randomFloat(2, 0, 5)
-    ];
-});

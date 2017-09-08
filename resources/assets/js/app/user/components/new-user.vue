@@ -96,6 +96,9 @@
                 const _token = document.getElementsByName('csrf-token')[0].content
                 console.log(_token)
                 this.$http.post('/users', this.user, {headers: {'X-CSRF-Token': _token}}).then(resolve => console.log(resolve))
+            },
+            checkEmail () {
+                //
             }
         }
     }
