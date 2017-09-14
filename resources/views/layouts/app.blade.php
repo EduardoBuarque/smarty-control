@@ -39,11 +39,14 @@
                         <router-link to="/" tag="li" exact>
                             <a>Home</a>
                         </router-link>
-                        <router-link to="/client" tag="li" exact>
+                        <router-link to="/customers" tag="li" exact>
                             <a>Clientes</a>
                         </router-link>
-                        <router-link to="/user" tag="li" exact>
+                        <router-link to="/users" tag="li" exact>
                             <a>Usuários</a>
+                        </router-link>
+                        <router-link to="/products" tag="li" exact>
+                            <a>Produtos</a>
                         </router-link>
                         <router-link to="/bar" tag="li" exact>
                             <a href="">Configuracões</a>

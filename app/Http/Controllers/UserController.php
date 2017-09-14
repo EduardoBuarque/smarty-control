@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return User::find($id);
     }
 
     /**
@@ -86,7 +86,8 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $result = User::find($id)->update($request->all());
+        return response()->json($result);
     }
 
     /**

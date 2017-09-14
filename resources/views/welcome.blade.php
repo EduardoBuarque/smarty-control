@@ -81,7 +81,7 @@
             <div class="content">
                 {{--<router-view></router-view>--}}
                 <div class="title m-b-md">
-                    Laravel
+                    Smarty-Control
                 </div>
 
                 <div class="links">

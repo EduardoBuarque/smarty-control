@@ -18,10 +18,12 @@ Route::get('/', function () {
 //Route::get('/city/{id}', 'CityController@show');
 Auth::routes();
 
-Route::get('/city', 'CityController@index');
-//Route::get('/user', 'UserController@index');
-Route::resource('/users', 'UserController');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/profiles', 'ProfileController');
+Route::resource('/users', 'UserController');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('/cities', 'CityController');
+Route::resource('/customers', 'CustomerController');
+
+Route::resource('/products', 'ProductController');

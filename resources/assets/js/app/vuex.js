@@ -1,4 +1,5 @@
-import { vuex as user } from './user'
-import { vuex as client } from './client'
+import { vuex as users } from './users'
+import { vuex as customers } from './customers'
+import { vuex as products } from './products'
 
-export default { user, client }
+export default { users, customers, products }

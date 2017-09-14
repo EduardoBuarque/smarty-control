@@ -2,15 +2,15 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Clientes</h1>
-            <list-users></list-users>
+            <customer-list></customer-list>
         </div>
     </div>
 </template>
 
 <script>
-    import ListUsers from './ListUsers.vue';
+    import CustomerList from './customer-list';
 
     export default {
-        components: { ListUsers }
+        components: { CustomerList }
     }
 </script>

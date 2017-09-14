@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <div class="panel-heading">Usuários
+        <div class="panel-heading">Produtos
             <slot name="panel-heading"></slot>
         </div>
 
@@ -9,32 +9,19 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Email</th>
-                        <th>Perfil</th>
-                        <th class="text-right">Status</th>
+                        <th>Custo</th>
+                        <th>Venda</th>
+                        <th>Categoria</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="user in pagination.data">
+                    <tr v-for="product in pagination.data">
                         <td>
-                            <a href="#">{{ user.name }}</a>
+                            <router-link to="casa">{{ product.name }}</router-link>
                         </td>
-                        <td>
-                            {{ user.email }}
-                        </td>
-                        <td>
-                            {{ user.profile.name }}
-                        </td>
-                        <td class="text-right">
-
-                            <a v-if="user.account_status" class="btn btn-default btn-success btn-xs">
-                                <i class="glyphicon glyphicon-ok"></i>
-                            </a>
-                            <a v-else="" class="btn btn-default btn-danger btn-xs">
-                                <i class="glyphicon glyphicon-ban-circle"></i>
-                            </a>
-
-                        </td>
+                        <td class="text-right">{{ product.cost }}</td>
+                        <td class="text-right">{{ product.value }}</td>
+                        <td>{{ product.category.name }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -67,12 +54,11 @@
                 this.getUsers(page)
             },
             getUsers (page) {
-                let url = '/users'
+                let url = '/products'
                 if (page)
                     url+= '?page='+page
 
-                this.$http.get(url).then(response =>
-                    this.pagination = response.data);
+                this.$http.get(url).then(response => this.pagination = response.data);
             },
         }
     }

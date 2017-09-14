@@ -1,4 +1,5 @@
-import { routes as user } from './user'
-import { routes as client } from './client'
+import { routes as users } from './users'
+import { routes as customers } from './customers'
+import { routes as products } from './products'
 
-export default [ ...user, ...client ]
+export default [ ...users, ...customers, ...products ]

@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-default">Limpar</button>
+                        <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
@@ -64,7 +64,6 @@
 <script>
 
     export default {
-        props: ['toggle'],
         data () {
             return {
                 user: {name: '', email: '', profile_id: 2, account_status: true},
@@ -72,21 +71,12 @@
             }
         },
         mounted () {
-            $('.modal').on('hidden.bs.modal', (e) => this.$emit('is-shown', false))
-        },
-        watch: {
-            toggle: function (val) {
-                if (val)
-                    this.toggleModal(val)
-            },
-        },
-        mounted () {
             this.getProfiles()
+            $('.modal')
+                .modal('toggle')
+                .on('hidden.bs.modal', e => console.log(this.$router.go(-1)))
         },
         methods: {
-            toggleModal(val) {
-                $('.modal').modal('toggle')
-            },
             getProfiles () {
                 this.$http.get('/profiles')
                     .then(resolve => resolve.data)
@@ -94,8 +84,7 @@
             },
             onSubmit() {
                 const _token = document.getElementsByName('csrf-token')[0].content
-                console.log(_token)
-                this.$http.post('/users', this.user, {headers: {'X-CSRF-Token': _token}}).then(resolve => console.log(resolve))
+                this.$http.post('/customers', this.user, {headers: {'X-CSRF-Token': _token}}).then(resolve => console.log(resolve))
             },
             checkEmail () {
                 //

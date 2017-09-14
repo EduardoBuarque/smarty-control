@@ -1,5 +1,5 @@
 import Main from './components/main';
 
 export default [
-    { path: '/user', component: Main }
+    { path: '/customers', component: Main }
 ]

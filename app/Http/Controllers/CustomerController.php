@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::with('city')->paginate(10);
+        return response()->json($customers);
     }
 
     /**
