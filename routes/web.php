@@ -27,3 +27,4 @@ Route::resource('/cities', 'CityController');
 Route::resource('/customers', 'CustomerController');
 
 Route::resource('/products', 'ProductController');
+Route::resource('/categories', 'CategoryController');

@@ -4,7 +4,7 @@ import EditUser from './components/edit-user'
 
 export default [
     {
-        path: '/products',
+        path: 'categories',
         component: Main,
         children: [
             { path: 'new', component: NewUser },

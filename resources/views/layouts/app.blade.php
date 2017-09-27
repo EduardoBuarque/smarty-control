@@ -45,8 +45,8 @@
                         <router-link to="/users" tag="li" exact>
                             <a>Usuários</a>
                         </router-link>
-                        <router-link to="/products" tag="li" exact>
-                            <a>Produtos</a>
+                        <router-link to="/products_categories" tag="li" exact>
+                            <a>Produtos e Categorias</a>
                         </router-link>
                         <router-link to="/bar" tag="li" exact>
                             <a href="">Configuracões</a>
