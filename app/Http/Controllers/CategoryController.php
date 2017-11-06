@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::with('products')->get();
         return response()->json($categories);
     }
 
@@ -36,7 +36,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $result = Category::create($request->all());
+        return response()->json($result);
     }
 
     /**
@@ -70,7 +71,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->name = $request->name;
+        $result = $category->save();
+        return response()->json($result);
     }
 
     /**

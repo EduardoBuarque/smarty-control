@@ -12,10 +12,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        #cont .container {
+            margin-top: 75px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -47,6 +52,9 @@
                         </router-link>
                         <router-link to="/products_categories" tag="li" exact>
                             <a>Produtos e Categorias</a>
+                        </router-link>
+                        <router-link to="/products" tag="li" exact>
+                            <a>Produtos</a>
                         </router-link>
                         <router-link to="/bar" tag="li" exact>
                             <a href="">Configuracões</a>
@@ -84,8 +92,10 @@
                 </div>
             </div>
         </nav>
-
-        @yield('content')
+        <div id="cont">
+            @yield('content')
+        </div>
+        <notifications position="bottom right"/>
     </div>
 
     <!-- Scripts -->

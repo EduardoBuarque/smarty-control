@@ -10,7 +10,7 @@
             </div>
         </div>
         <router-view></router-view>
-        <button @click="mudarNome()">Mudar nome</button>
+        <button @click="changeUserDb({ name: 'Alecio' })">Mudar nome</button>
     </div>
 </template>
 
@@ -24,6 +24,7 @@
         },
         components: { UserList },
         methods: {
+            ...mapActions(['changeUserDb']),
             mudarNome () {
                 const name = 'Clara';
                 this.$store.dispatch('changeUserDb', { name })

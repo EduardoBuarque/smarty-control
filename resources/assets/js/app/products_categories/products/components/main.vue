@@ -17,6 +17,7 @@
     import ListProduct from './list-product.vue'
 
     export default {
+        name: 'Products',
         components: { ListProduct }
     }
 </script>

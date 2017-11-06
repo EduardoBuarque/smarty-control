@@ -1,6 +1,6 @@
 import Main from './components/main';
-import NewUser from './components/new-user'
-import EditUser from './components/edit-user'
+import NewUser from './components/new-category'
+import EditCategory from './components/edit-category'
 
 export default [
     {
@@ -8,7 +8,7 @@ export default [
         component: Main,
         children: [
             { path: 'new', component: NewUser },
-            { path: ':id', component: EditUser }
+            { path: ':id', component: EditCategory }
         ]
     }
 ]

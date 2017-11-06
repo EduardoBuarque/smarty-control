@@ -1,9 +1,8 @@
 <template>
     <div>
-        <!--{{ categories || json }}-->
-        <div class="panel panel-default" v-for="category in getCategories">
+        <div class="panel panel-default" v-for="category in categories">
             <div class="panel-heading">{{ category.name }}
-                <router-link :to="'/products/new/'+category.id" class="btn btn-primary btn-xs">Novo</router-link>
+                <router-link to="products/new/category.name" class="btn btn-primary btn-xs">Novo</router-link>
             </div>
 
             <div class="panel-body">
@@ -16,7 +15,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="product in category.products">
+                        <tr v-for="product in category.products">
                             <td>
                                 <router-link :to="'products/'+product.id">{{ product.name }}</router-link>
                             </td>
@@ -32,30 +31,42 @@
 
 <script>
 
-    import { mapGetters } from 'vuex'
-
     export default {
+        props: ['lista'],
         data: function () {
             return {
-//                categories: [],
             }
         },
         created() {
-
-//            this.categories = this.getCategories;
+//            this.getProducts()
         },
         computed: {
-//            getCategories() {
-//                return this.$store.state.products_categories.getCategories();
-//            }
-            ...mapGetters([
-                'getCategories'
-            ]),
-//            ...mapState({
-//                categories: state => state.products_categories.categories
-//            })
+            categories: function (val) {
+                return this.lista
+            }
         },
-        methods: {}
+        methods: {
+//            getProducts (page) {
+//                let url = '/products'
+//                if (page)
+//                    url+= '?page='+page
+//
+//                this.$http.get(url).then(response => {
+//                    this.products = this.ordenarAgrupar(response.data)
+//                });
+//            },
+//            ordenarAgrupar (dados) {
+//                const categoriesIds = dados.reduce((prev, curr) => {
+//                    if (! prev.includes(curr.category.id))
+//                        prev.push(curr.category.id)
+//                    return prev;
+//                }, [])
+//                const result = categoriesIds.map(v => {
+//                    return dados.filter(a => a.category.id == v)
+//                })
+//                return result;
+//            }
+        }
     }
 </script>
 

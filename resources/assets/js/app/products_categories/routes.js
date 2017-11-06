@@ -1,6 +1,6 @@
 import Main from './components/main';
 
-import { routes as categories } from './category'
+import { routes as categories } from './categories'
 import { routes as products } from './products'
 
 const root = [

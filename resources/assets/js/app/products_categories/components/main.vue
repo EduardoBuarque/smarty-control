@@ -21,10 +21,26 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+
     export default {
-        data () {
-            return { openModal: false }
+        name: 'PorductsCategories',
+        created() {
+            const self = this
+            this.getCategories().then(response => {
+                self.setCategories(response.data)
+            });
         },
-        methods: { }
+        methods: {
+            ...mapActions(['setCategories']),
+//            setCategoriesStore (categories) {
+//                this.$store.dispatch('setCategoriesState', { categories })
+////                this.$store.commit('CHANGE_USER', {name})
+//            },
+            getCategories () {
+                const url = '/categories'
+                return this.$http.get(url);
+            },
+        }
     }
 </script>
