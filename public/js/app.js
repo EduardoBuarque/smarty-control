@@ -49519,7 +49519,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             this.$http.put('/categories/' + id, { id: id, name: name }, { headers: { 'X-CSRF-Token': _token } }).then(function (resolve) {
                 if (resolve.ok) {
-                    _this3.editCategory({ id: id, name: name });
+                    _this3.editCategory(resolve.data);
 
                     _this3.$notify({
                         title: 'Sucesso',
@@ -49752,7 +49752,7 @@ if (false) {
 /* harmony default export */ __webpack_exports__["a"] = ([{
     path: '/products_categories/products',
     component: __WEBPACK_IMPORTED_MODULE_0__components_main___default.a,
-    children: [{ path: 'new/:id', component: __WEBPACK_IMPORTED_MODULE_1__components_new_product___default.a }, { path: ':id', component: __WEBPACK_IMPORTED_MODULE_2__components_edit_product___default.a }]
+    children: [{ path: 'new/:id', component: __WEBPACK_IMPORTED_MODULE_1__components_new_product___default.a }, { path: ':id_cat/:id', component: __WEBPACK_IMPORTED_MODULE_2__components_edit_product___default.a }]
 }]);
 
 /***/ }),
@@ -50001,7 +50001,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._m(0, true), _vm._v(" "), _c('tbody', _vm._l((category.products), function(product) {
       return _c('tr', [_c('td', [_c('router-link', {
         attrs: {
-          "to": 'products/' + product.id
+          "to": ("products/" + (category.id) + "/" + (product.id))
         }
       }, [_vm._v(_vm._s(product.name))])], 1), _vm._v(" "), _c('td', {
         staticClass: "text-right"
@@ -50239,9 +50239,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "modal-content"
   }, [_c('form', {
     staticClass: "form-horizontal",
-    attrs: {
-      "id": "novo-user"
-    },
     on: {
       "submit": function($event) {
         $event.preventDefault();
@@ -50451,6 +50448,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -50504,66 +50504,90 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            user: { name: '', email: '', profile_id: 2, account_status: true },
-            profiles: []
+            product: { id: '', name: '', cost: '', value: '' },
+            category: {},
+            existProduct: false
         };
     },
     mounted: function mounted() {
         var _this = this;
 
-        this.getProfiles();
+        var id_cat = this.$route.params['id_cat'];
+        var id_pro = this.$route.params['id'];
+
+        var selectCat = function selectCat(i) {
+            return i.id == id_cat;
+        };
+        var selectPro = function selectPro(i) {
+            return i.id == id_pro;
+        };
+
+        this.category = this.categories.find(selectCat);
+        this.product = this.category.products.find(selectPro);
+
         $('.modal').modal('toggle').on('hidden.bs.modal', function (e) {
-            return console.log(_this.$router.go(-1));
+            return _this.$router.go(-1);
         });
     },
 
-    methods: {
-        getProfiles: function getProfiles() {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])({ categories: 'getCategories' })),
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['editProduct']), {
+        oninput: function oninput(event) {
             var _this2 = this;
 
-            this.$http.get('/profiles').then(function (resolve) {
-                return resolve.data;
-            }).then(function (data) {
-                return _this2.profiles = data;
-            });
-            var id = this.$route.params['id'];
-            this.$http.get('/users/' + id + '/edit').then(function (resolve) {
-                return resolve.data;
-            }).then(function (data) {
-                return _this2.user = data;
-            });
+            var value = event.target.value;
+
+            var names = function names(i) {
+                return i.name;
+            };
+            var different = function different(i) {
+                return i.id !== _this2.product.id;
+            };
+
+            this.existProduct = this.category.products.filter(different).map(names).includes(value);
         },
         onSubmit: function onSubmit() {
             var _this3 = this;
 
+            if (this.existProduct) return;
+
             var _token = document.getElementsByName('csrf-token')[0].content;
-            var id = this.user.id;
-            this.$http.put('/customers/' + id, this.user, { headers: { 'X-CSRF-Token': _token } }).then(function (resolve) {
+
+            var id = this.product.id;
+
+
+            this.$http.put('/products/' + id, this.product, { headers: { 'X-CSRF-Token': _token } }).then(function (resolve) {
                 if (resolve.ok) {
-                    _this3.$emit('db-change', id);
+                    //                            Object.assign(this.product, resolve.data)
+                    _this3.editProduct(resolve.data);
+
+                    _this3.$notify({
+                        title: 'Sucesso',
+                        text: 'Produto "' + _this3.product.name + '" alterada com sucesso!',
+                        type: 'success'
+                    });
+
+                    $('.modal').modal('toggle');
                 }
-                console.log('nada');
+            }).catch(function (error) {
+
+                _this3.$notify({
+                    title: 'Error',
+                    text: 'Algo de errado não está certo!',
+                    type: 'error'
+                });
+
+                $('.modal').modal('toggle');
             });
-        },
-        checkEmail: function checkEmail() {
-            //
         }
-    }
+    })
 });
 
 /***/ }),
@@ -50595,14 +50619,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onSubmit($event)
       }
     }
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "modal-header"
+  }, [_vm._m(0), _vm._v(" "), _c('h4', {
+    staticClass: "modal-title"
+  }, [_vm._v("Novo Produto \"" + _vm._s(_vm.category.name) + "\"")])]), _vm._v(" "), _c('div', {
     staticClass: "modal-body"
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col col-md-12"
   }, [_c('div', {
-    staticClass: "form-group"
+    staticClass: "form-group has-feedback",
+    class: {
+      'has-error': _vm.existProduct
+    }
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
     attrs: {
@@ -50614,54 +50645,64 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.user.name),
-      expression: "user.name"
+      value: (_vm.product.name),
+      expression: "product.name"
     }],
     staticClass: "form-control",
     attrs: {
       "type": "text",
       "id": "name",
-      "placeholder": "Fulano da Silva",
+      "placeholder": "Pizzas",
+      "autocomplete": "off",
       "required": ""
     },
     domProps: {
-      "value": (_vm.user.name)
+      "value": (_vm.product.name)
     },
     on: {
-      "input": function($event) {
+      "input": [function($event) {
         if ($event.target.composing) { return; }
-        _vm.user.name = $event.target.value
-      }
+        _vm.product.name = $event.target.value
+      }, _vm.oninput]
     }
-  })])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('span', {
+    staticClass: "glyphicon form-control-feedback",
+    class: {
+      'glyphicon-remove': _vm.existProduct
+    }
+  }), _vm._v(" "), (_vm.existProduct) ? _c('span', {
+    staticClass: "help-block"
+  }, [_vm._v("Essa produto já existe em \"" + _vm._s(_vm.category.name) + "\"!")]) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
     attrs: {
-      "for": "email"
+      "for": "cost"
     }
-  }, [_vm._v("E-mail")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Custo")]), _vm._v(" "), _c('div', {
     staticClass: "col-sm-9"
   }, [_c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.user.email),
-      expression: "user.email"
+      value: (_vm.product.cost),
+      expression: "product.cost"
     }],
     staticClass: "form-control",
     attrs: {
-      "type": "email",
-      "id": "email",
-      "placeholder": "Password"
+      "type": "number",
+      "step": "any",
+      "min": "0",
+      "id": "cost",
+      "placeholder": "3.50"
     },
     domProps: {
-      "value": (_vm.user.email)
+      "value": (_vm.product.cost)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.user.email = $event.target.value
+        _vm.product.cost = $event.target.value
       }
     }
   })])]), _vm._v(" "), _c('div', {
@@ -50669,88 +50710,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('label', {
     staticClass: "col-sm-2 control-label",
     attrs: {
-      "for": "profile_id"
+      "for": "value"
     }
-  }, [_vm._v("Perfil")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Value")]), _vm._v(" "), _c('div', {
     staticClass: "col-sm-9"
-  }, [_c('select', {
+  }, [_c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.user.profile_id),
-      expression: "user.profile_id"
+      value: (_vm.product.value),
+      expression: "product.value"
     }],
     staticClass: "form-control",
     attrs: {
-      "name": "profile_id",
-      "id": "profile_id"
-    },
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.user.profile_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, _vm._l((_vm.profiles), function(profile) {
-    return _c('option', {
-      domProps: {
-        "value": profile.id
-      }
-    }, [_vm._v(_vm._s(profile.name))])
-  }))])]), _vm._v(" "), _c('div', {
-    staticClass: "form-group"
-  }, [_c('label', {
-    staticClass: "col-sm-2 control-label",
-    attrs: {
-      "for": "account_status"
-    }
-  }, [_vm._v("Status")]), _vm._v(" "), _c('div', {
-    staticClass: "col-sm-9"
-  }, [_c('div', {
-    staticClass: "checkbox"
-  }, [_c('label', [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.user.account_status),
-      expression: "user.account_status"
-    }],
-    attrs: {
-      "type": "checkbox",
-      "id": "account_status",
-      "checked": ""
+      "type": "number",
+      "step": "any",
+      "min": "0",
+      "id": "value",
+      "placeholder": "3.50"
     },
     domProps: {
-      "checked": Array.isArray(_vm.user.account_status) ? _vm._i(_vm.user.account_status, null) > -1 : (_vm.user.account_status)
+      "value": (_vm.product.value)
     },
     on: {
-      "__c": function($event) {
-        var $$a = _vm.user.account_status,
-          $$el = $event.target,
-          $$c = $$el.checked ? (true) : (false);
-        if (Array.isArray($$a)) {
-          var $$v = null,
-            $$i = _vm._i($$a, $$v);
-          if ($$el.checked) {
-            $$i < 0 && (_vm.user.account_status = $$a.concat($$v))
-          } else {
-            $$i > -1 && (_vm.user.account_status = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-          }
-        } else {
-          _vm.user.account_status = $$c
-        }
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.product.value = $event.target.value
       }
     }
-  }), _vm._v("Ativo\n                                            ")])])])])])])]), _vm._v(" "), _vm._m(1)])])])])
+  })])])])])]), _vm._v(" "), _vm._m(1)])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "modal-header"
-  }, [_c('button', {
+  return _c('button', {
     staticClass: "close",
     attrs: {
       "type": "button",
@@ -50761,15 +50751,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "aria-hidden": "true"
     }
-  }, [_vm._v("×")])]), _vm._v(" "), _c('h4', {
-    staticClass: "modal-title"
-  }, [_vm._v("Editar Usuário")])])
+  }, [_vm._v("×")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "modal-footer"
   }, [_c('button', {
     staticClass: "btn btn-default",
     attrs: {
+      "type": "button",
       "data-dismiss": "modal"
     }
   }, [_vm._v("Cancelar")]), _vm._v(" "), _c('button', {
@@ -50871,17 +50860,23 @@ if (false) {
         state.categories.push(payload);
     },
     'EDIT_CATEGORY': function EDIT_CATEGORY(state, payload) {
-        var id = payload.id,
-            name = payload.name;
+        var id = payload.id;
 
 
         state.categories.forEach(function (i) {
-            if (i.id == id) Object.assign(i, { name: name });
+            if (i.id == id) Object.assign(i, payload);
         });
     },
     'ADD_PRODUCT': function ADD_PRODUCT(state, payload) {
         state.categories.forEach(function (i) {
             if (i.id == payload.category_id) i.products.push(payload);
+        });
+    },
+    'EDIT_PRODUCT': function EDIT_PRODUCT(state, payload) {
+        state.categories.forEach(function (category) {
+            category.products.forEach(function (i) {
+                if (i.id == payload.id) Object.assign(i, payload);
+            });
         });
     }
 });

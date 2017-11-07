@@ -2,7 +2,7 @@
     <div class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id="novo-user" class="form-horizontal"  v-on:submit.prevent="onSubmit">
+                <form class="form-horizontal"  v-on:submit.prevent="onSubmit">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

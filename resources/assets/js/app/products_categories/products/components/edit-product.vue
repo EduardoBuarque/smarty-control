@@ -5,52 +5,42 @@
             <div class="modal-content">
                 <form id="novo-user" class="form-horizontal"  v-on:submit.prevent="onSubmit">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Editar Usuário</h4>
-                </div>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Novo Produto "{{ category.name }}"</h4>
+                    </div>
 
                     <div class="modal-body">
-                            <div class="row">
-                                <div class="col col-md-12">
-                                    <div class="form-group">
-                                        <label for="name" class="col-sm-2 control-label">Nome</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="name" v-model="user.name" placeholder="Fulano da Silva" required>
-                                        </div>
+                        <div class="row">
+                            <div class="col col-md-12">
+                                <div class="form-group has-feedback" :class="{ 'has-error': existProduct }">
+                                    <label for="name" class="col-sm-2 control-label">Nome</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="name" v-on:input="oninput" v-model="product.name" placeholder="Pizzas" autocomplete="off" required>
+                                        <span class="glyphicon form-control-feedback" :class="{ 'glyphicon-remove': existProduct }"></span>
+                                        <span v-if="existProduct" class="help-block">Essa produto já existe em "{{ category.name }}"!</span>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="email" class="col-sm-2 control-label">E-mail</label>
-                                        <div class="col-sm-9">
-                                            <input type="email" class="form-control" id="email" v-model="user.email" placeholder="Password">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="profile_id" class="col-sm-2 control-label">Perfil</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" name="profile_id" id="profile_id" v-model="user.profile_id">
-                                                <option v-for="profile in profiles" :value="profile.id">{{ profile.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account_status" class="col-sm-2 control-label">Status</label>
-                                        <div class="col-sm-9">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" id="account_status" checked v-model="user.account_status">Ativo
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
+                                <div class="form-group">
+                                    <label for="cost" class="col-sm-2 control-label">Custo</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" step="any" min="0" class="form-control" id="cost" v-model="product.cost" placeholder="3.50">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="value" class="col-sm-2 control-label">Value</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" step="any" min="0" class="form-control" id="value" v-model="product.value" placeholder="3.50">
+                                    </div>
+                                </div>
+
                             </div>
+                        </div>
 
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
@@ -63,43 +53,76 @@
 
 <script>
 
+    import { mapGetters, mapActions } from 'vuex'
+
     export default {
         data () {
             return {
-                user: {name: '', email: '', profile_id: 2, account_status: true},
-                profiles: []
+                product: { id: '', name: '', cost: '', value: ''},
+                category: {},
+                existProduct: false
             }
         },
         mounted () {
-            this.getProfiles()
+            const id_cat = this.$route.params['id_cat']
+            const id_pro = this.$route.params['id']
+
+            const selectCat = i => i.id == id_cat
+            const selectPro = i => i.id == id_pro
+
+            this.category = this.categories.find(selectCat)
+            this.product = this.category.products.find(selectPro)
+
             $('.modal')
                 .modal('toggle')
-                .on('hidden.bs.modal', e => console.log(this.$router.go(-1)))
+                .on('hidden.bs.modal', e => this.$router.go(-1))
+        },
+        computed: {
+            ...mapGetters({ categories: 'getCategories' }),
         },
         methods: {
-            getProfiles () {
-                this.$http.get('/profiles')
-                    .then(resolve => resolve.data)
-                    .then(data => this.profiles = data)
-                const id = this.$route.params['id'];
-                this.$http.get(`/users/${id}/edit`)
-                    .then(resolve => resolve.data)
-                    .then(data => this.user = data)
+            ...mapActions(['editProduct']),
+            oninput(event) {
+                const value = event.target.value
+
+                const names = i => i.name
+                const different = i => i.id !== this.product.id
+
+                this.existProduct = this.category.products.filter(different).map(names).includes(value)
             },
             onSubmit() {
+                if (this.existProduct) return
+
                 const _token = document.getElementsByName('csrf-token')[0].content
-                const id = this.user.id;
-                this.$http.put('/customers/'+id, this.user, {headers: {'X-CSRF-Token': _token}})
+
+                const { id } = this.product
+
+                this.$http.put('/products/'+ id, this.product, {headers: {'X-CSRF-Token': _token}})
                     .then(resolve => {
                         if (resolve.ok) {
-                            this.$emit('db-change', id)
+//                            Object.assign(this.product, resolve.data)
+                            this.editProduct(resolve.data)
+
+                            this.$notify({
+                                title:'Sucesso',
+                                text: `Produto "${this.product.name}" alterada com sucesso!`,
+                                type: 'success'
+                            })
+
+                            $('.modal').modal('toggle')
                         }
-                        console.log('nada')
+                    })
+                    .catch(error => {
+
+                        this.$notify({
+                            title:'Error',
+                            text: 'Algo de errado não está certo!',
+                            type: 'error'
+                        })
+
+                        $('.modal').modal('toggle')
                     })
             },
-            checkEmail () {
-                //
-            }
         }
     }
 </script>

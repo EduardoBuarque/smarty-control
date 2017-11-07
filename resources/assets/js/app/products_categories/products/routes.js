@@ -8,7 +8,7 @@ export default [
         component: Main,
         children: [
             { path: 'new/:id', component: NewProduct },
-            { path: ':id', component: EditProduct }
+            { path: ':id_cat/:id', component: EditProduct }
         ]
     }
 ]

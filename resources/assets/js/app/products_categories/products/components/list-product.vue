@@ -18,7 +18,7 @@
                     <tbody>
                     <tr v-for="product in category.products">
                             <td>
-                                <router-link :to="'products/'+product.id">{{ product.name }}</router-link>
+                                <router-link :to="`products/${category.id}/${product.id}`">{{ product.name }}</router-link>
                             </td>
                             <td class="text-right">{{ product.cost }}</td>
                             <td class="text-right">{{ product.value }}</td>

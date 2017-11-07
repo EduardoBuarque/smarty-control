@@ -84,7 +84,7 @@
                 this.$http.put('/categories/' + id, {id, name}, {headers: {'X-CSRF-Token': _token}})
                     .then(resolve => {
                         if (resolve.ok) {
-                            this.editCategory({id, name})
+                            this.editCategory(resolve.data)
 
                             this.$notify({
                                 title: 'Sucesso',
