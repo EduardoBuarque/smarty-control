@@ -75,36 +75,36 @@
         methods: {
             ...mapActions(['editCategory']),
             onSubmit() {
-                if (!this.existCategory) {
+                if (this.existCategory) return
 
-                    const _token = document.getElementsByName('csrf-token')[0].content
+                const _token = document.getElementsByName('csrf-token')[0].content
 
-                    const [id, name] = [this.id, this.name]
+                const [id, name] = [this.id, this.name]
 
-                    this.$http.put('/categories/'+id, { id, name }, {headers: {'X-CSRF-Token': _token}})
-                        .then(resolve => {
-                            if (resolve.ok) {
-                                this.editCategory({ id, name })
+                this.$http.put('/categories/' + id, {id, name}, {headers: {'X-CSRF-Token': _token}})
+                    .then(resolve => {
+                        if (resolve.ok) {
+                            this.editCategory({id, name})
 
-                                this.$notify({
-                                    title:'Sucesso',
-                                    text: `Categoria "${this.name}" alterada com sucesso!`,
-                                    type: 'success'
-                                })
-
-                                $('.modal').modal('toggle')
-                            }
-                        })
-                        .catch(error => {
                             this.$notify({
-                                title:'Error',
-                                text: 'Algo de errado não está certo!',
-                                type: 'error'
+                                title: 'Sucesso',
+                                text: `Categoria "${this.name}" alterada com sucesso!`,
+                                type: 'success'
                             })
 
                             $('.modal').modal('toggle')
+                        }
+                    })
+                    .catch(error => {
+                        this.$notify({
+                            title: 'Error',
+                            text: 'Algo de errado não está certo!',
+                            type: 'error'
                         })
-                }
+
+                        $('.modal').modal('toggle')
+                    })
+
             },
         }
     }

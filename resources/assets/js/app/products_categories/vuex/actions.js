@@ -1,7 +1,17 @@
-// import { vuex as c} from '../category'
 export default {
-    // setCategories (context, payload) {
-    //     console.log(payload, "casa")
-    //     context.commit('SET_CATEGORIES', payload)
-    // }
+    setCategories ({ commit }, payload) {
+        commit('SET_CATEGORIES', payload)
+    },
+    addCategory ({ commit }, payload) {
+        commit('ADD_CATEGORY', payload)
+    },
+    editCategory ({ commit }, payload) {
+        commit('EDIT_CATEGORY', payload)
+    },
+    addProduct ({ commit }, payload) {
+        commit('ADD_PRODUCT', payload)
+    },
+    editProduct ({ commit }, payload) {
+        commit('EDIT_PRODUCT', payload)
+    }
 }

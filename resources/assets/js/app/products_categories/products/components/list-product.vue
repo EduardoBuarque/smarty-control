@@ -3,10 +3,10 @@
         <!--{{ categories || json }}-->
         <div class="panel panel-default" v-for="category in getCategories">
             <div class="panel-heading">{{ category.name }}
-                <router-link :to="'/products/new/'+category.id" class="btn btn-primary btn-xs">Novo</router-link>
+                <router-link :to="'products/new/'+category.id" class="btn btn-primary btn-xs">Novo</router-link>
             </div>
 
-            <div class="panel-body">
+            <div v-if="count(category.products)" class="panel-body">
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
@@ -55,7 +55,12 @@
 //                categories: state => state.products_categories.categories
 //            })
         },
-        methods: {}
+        methods: {
+            count: (val) => Array.isArray(val) ? val.length : 0
+        },
+        filters: {
+            count: (val) => Array.isArray(val) ? val.length : 0
+        }
     }
 </script>
 

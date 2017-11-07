@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use function Symfony\Component\Console\Tests\Command\createClosure;
 
 class ProductController extends Controller
 {
@@ -36,7 +37,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $result = Product::create($request->all());
+        return response()->json($result);
     }
 
     /**

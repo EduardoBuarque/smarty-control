@@ -24,16 +24,13 @@
                 </tbody>
             </table>
         </div>
-        <!--<sc-modal></sc-modal>-->
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import ScModal from '../../../../components/sc-modal'
 
     export default {
-        components: { ScModal },
         computed: {
             ...mapGetters({
                 categories: 'getCategories'

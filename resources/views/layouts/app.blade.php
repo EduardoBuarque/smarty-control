@@ -95,7 +95,7 @@
         <div id="cont">
             @yield('content')
         </div>
-        <notifications position="bottom right"/>
+        <notifications position="top right"/>
     </div>
 
     <!-- Scripts -->

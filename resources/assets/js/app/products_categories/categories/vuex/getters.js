@@ -1,3 +1,3 @@
 export default {
-    getCategories: state => state.categories
+    // getCategories: state => state.categories
 }

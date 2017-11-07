@@ -48,9 +48,7 @@
             }
         },
         computed: {
-            ...mapGetters({
-                categories: 'getCategories'
-            })
+            ...mapGetters({ categories: 'getCategories' })
         },
         watch: {
             name: function (val) {
@@ -65,33 +63,37 @@
         methods: {
             ...mapActions(['addCategory']),
             onSubmit() {
-                if (!this.existCategory) {
-                    const _token = document.getElementsByName('csrf-token')[0].content
+                if (this.existCategory) return
 
-                    this.$http.post('/categories', { name: this.name }, {headers: {'X-CSRF-Token': _token}})
-                        .then(resolve => {
-                            if (resolve.ok) {
-                                this.addCategory(resolve.data)
+                const _token = document.getElementsByName('csrf-token')[0].content
 
-                                this.$notify({
-                                    title:'Sucesso',
-                                    text: `Categoria "${this.name}" adicionada com sucesso!`,
-                                    type: 'success'
-                                })
+                this.$http.post('/categories', { name: this.name }, {headers: {'X-CSRF-Token': _token}})
+                    .then(resolve => {
+                        if (resolve.ok) {
 
-                                $('.modal').modal('toggle')
-                            }
-                        })
-                        .catch(error => {
+                            resolve.data.products = []
+
+                            this.addCategory(resolve.data)
+
                             this.$notify({
-                                title:'Error',
-                                text: 'Algo de errado não está certo!',
-                                type: 'error'
+                                title:'Sucesso',
+                                text: `Categoria "${this.name}" adicionada com sucesso!`,
+                                type: 'success'
                             })
 
                             $('.modal').modal('toggle')
+                        }
+                    })
+                    .catch(error => {
+                        this.$notify({
+                            title:'Error',
+                            text: 'Algo de errado não está certo!',
+                            type: 'error'
                         })
-                }
+
+                        $('.modal').modal('toggle')
+                    })
+
             }
         }
     }
