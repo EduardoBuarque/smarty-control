@@ -77,3 +77,9 @@
         }
     }
 </script>
+<style scoped>
+    .panel-heading {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>

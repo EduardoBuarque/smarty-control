@@ -25,11 +25,6 @@
         components: { UserList },
         methods: {
             ...mapActions(['changeUserDb']),
-            mudarNome () {
-                const name = 'Clara';
-                this.$store.dispatch('changeUserDb', { name })
-//                this.$store.commit('CHANGE_USER', {name})
-            }
         }
     }
 </script>

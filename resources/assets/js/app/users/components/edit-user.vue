@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
@@ -66,7 +66,7 @@
     export default {
         data () {
             return {
-                user: {name: '', email: '', profile_id: 2, account_status: true},
+                user: {name: '', email: '', profile_id: 2, account_status: false},
                 profiles: []
             }
         },
@@ -74,7 +74,7 @@
             this.getProfiles()
             $('.modal')
                 .modal('toggle')
-                .on('hidden.bs.modal', e => console.log(this.$router.go(-1)))
+                .on('hidden.bs.modal', e => this.$router.go(-1))
         },
         methods: {
             getProfiles () {
@@ -89,16 +89,31 @@
             onSubmit() {
                 const _token = document.getElementsByName('csrf-token')[0].content
                 const id = this.user.id;
-                this.$http.put('/customers/'+id, this.user, {headers: {'X-CSRF-Token': _token}})
+
+                this.$http.put('/users/'+id, this.user, {headers: {'X-CSRF-Token': _token}})
                     .then(resolve => {
                         if (resolve.ok) {
-                            this.$emit('db-change', id)
+                            this.$emit('user-change', id)
+
+                            this.$notify({
+                                title:'Sucesso',
+                                text: `Usuario "${this.user.name}" alterada com sucesso!`,
+                                type: 'success'
+                            })
+
+                            $('.modal').modal('toggle')
                         }
-                        console.log('nada')
                     })
-            },
-            checkEmail () {
-                //
+                    .catch(error => {
+
+                        this.$notify({
+                            title:'Error',
+                            text: 'Algo de errado não está certo!',
+                            type: 'error'
+                        })
+
+                        $('.modal').modal('toggle')
+                    })
             }
         }
     }

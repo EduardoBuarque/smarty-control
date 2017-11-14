@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-         $users = User::with('profile')->paginate(10);
+         $users = User::with('profile')->orderBy('name')->paginate(10);
          return response()->json($users);
     }
 
@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return User::find($id);
+        return response()->json(User::find($id));
     }
 
     /**
