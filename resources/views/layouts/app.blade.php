@@ -44,6 +44,9 @@
                         <router-link to="/" tag="li" exact>
                             <a>Home</a>
                         </router-link>
+                        <router-link to="/orders" tag="li" exact>
+                            <a>Pedido</a>
+                        </router-link>
                         <router-link to="/customers" tag="li" exact>
                             <a>Clientes</a>
                         </router-link>
@@ -52,9 +55,6 @@
                         </router-link>
                         <router-link to="/products_categories" tag="li" exact>
                             <a>Produtos e Categorias</a>
-                        </router-link>
-                        <router-link to="/products" tag="li" exact>
-                            <a>Produtos</a>
                         </router-link>
                         <router-link to="/bar" tag="li" exact>
                             <a href="">Configuracões</a>

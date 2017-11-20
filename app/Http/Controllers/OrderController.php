@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +41,18 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $order = new Order();
+
+        $order->user_id = Auth::user()->id;
+        $customer = $request->customer;
+        $order->customer_id = $customer['id'];
+
+        $order->save();
+        foreach ($request->products as $product) {
+            $order->products()->attach($product['id'], ['quant' => $product['quant']]);
+        }
+
+        return response()->json($order);
     }
 
     /**

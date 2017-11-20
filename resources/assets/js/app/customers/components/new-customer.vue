@@ -5,10 +5,10 @@
             <div class="modal-content">
                 <form id="novo-user" class="form-horizontal"  v-on:submit.prevent="onSubmit">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Novo Usuário</h4>
-                </div>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Novo Cliente</h4>
+                    </div>
 
                     <div class="modal-body">
                             <div class="row">
@@ -16,31 +16,27 @@
                                     <div class="form-group">
                                         <label for="name" class="col-sm-2 control-label">Nome</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="name" v-model="user.name" placeholder="Fulano da Silva" required>
+                                            <input type="text" class="form-control" id="name" v-model="customer.name" placeholder="Fulano da Silva" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email" class="col-sm-2 control-label">E-mail</label>
+                                        <label for="phone" class="col-sm-2 control-label">Telefone</label>
                                         <div class="col-sm-9">
-                                            <input type="email" class="form-control" id="email" v-model="user.email" placeholder="Password">
+                                            <input type="tel" class="form-control" id="phone" v-model="customer.phone" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="profile_id" class="col-sm-2 control-label">Perfil</label>
+                                        <label for="address" class="col-sm-2 control-label">Endereço</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="profile_id" id="profile_id" v-model="user.profile_id">
-                                                <option v-for="profile in profiles" :value="profile.id">{{ profile.name }}</option>
+                                            <input type="tel" class="form-control" id="address" v-model="customer.address" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city_id" class="col-sm-2 control-label">Cidade</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="city_id" id="city_id" v-model="customer.city_id" required>
+                                                <option v-for="city in cities" :value="city.id">{{ city.name }}</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account_status" class="col-sm-2 control-label">Status</label>
-                                        <div class="col-sm-9">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" id="account_status" checked v-model="user.account_status">Ativo
-                                                </label>
-                                            </div>
                                         </div>
                                     </div>
 
@@ -66,31 +62,31 @@
     export default {
         data () {
             return {
-                user: {name: '', email: '', profile_id: 2, account_status: true},
-                profiles: []
+                customer: { name: '', phone: '', city_id: '', address: ''},
+                cities: []
             }
         },
         mounted () {
-            this.getProfiles()
+            this.getCities()
             $('.modal')
                 .modal('toggle')
-                .on('hidden.bs.modal', e => console.log(this.$router.go(-1)))
+                .on('hidden.bs.modal', e => this.$router.go(-1))
         },
         methods: {
-            getProfiles () {
-                this.$http.get('/profiles')
+            getCities () {
+                this.$http.get('/cities')
                     .then(resolve => resolve.data)
-                    .then(data => this.profiles = data)
+                    .then(data => this.cities = data)
             },
             onSubmit() {
                 const _token = document.getElementsByName('csrf-token')[0].content
-                this.$http.post('/users', this.user, {headers: {'X-CSRF-Token': _token}})
+                this.$http.post('/customers', this.customer, {headers: {'X-CSRF-Token': _token}})
                     .then(resolve => {
                         if (resolve.ok) {
 
                             this.$notify({
                                 title:'Sucesso',
-                                text: `Usuario "${this.user.name}" adicionado com sucesso!`,
+                                text: `Cliente "${this.customer.name}" adicionado com sucesso!`,
                                 type: 'success'
                             })
 
@@ -98,7 +94,6 @@
                         }
                     })
                     .catch(error => {
-
                         this.$notify({
                             title:'Error',
                             text: 'Algo de errado não está certo!',
@@ -107,7 +102,7 @@
 
                         $('.modal').modal('toggle')
                     })
-            },
+            }
         }
     }
 </script>

@@ -1,17 +1,15 @@
 <template>
     <div>
         <div class="panel panel-default" v-for="category in categories">
-            <div class="panel-heading">{{ category.name }}
-                <router-link to="products/new/category.name" class="btn btn-primary btn-xs">Novo</router-link>
-            </div>
+            <div class="panel-heading">{{ category.name }}</div>
 
             <div class="panel-body">
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Custo</th>
-                            <th>Venda</th>
+                            <th>Valor</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -19,8 +17,10 @@
                             <td>
                                 <router-link :to="'products/'+product.id">{{ product.name }}</router-link>
                             </td>
-                            <td class="text-right">{{ product.cost }}</td>
                             <td class="text-right">{{ product.value }}</td>
+                            <td class="text-right">
+                                <button class="btn btn-primary btn-xs" v-on:click="addProductToOrder(product)"><i class="glyphicon glyphicon-plus-sign"></i></button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
 
     export default {
         props: ['lista'],
@@ -41,11 +42,14 @@
 //            this.getProducts()
         },
         computed: {
-            categories: function (val) {
-                return this.lista
-            }
+            categories: function (val) { return this.lista }
         },
         methods: {
+            ...mapActions(['addProductToOrder']),
+//            addCart(product) {
+//                this.$emit('add-cart', product)
+//                console.log(product)
+//            }
 //            getProducts (page) {
 //                let url = '/products'
 //                if (page)

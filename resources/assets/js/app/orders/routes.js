@@ -3,7 +3,7 @@ import NewCategory from './components/new-category'
 
 export default [
     {
-        path: '/products', component: Main,
+        path: '/orders', component: Main,
         children: [
             { path: 'categories/new', component: NewCategory }
         ]

@@ -13,6 +13,7 @@ class CitiesTableSeeder extends Seeder
      */
     public function run()
     {
+        City::create(['name' => 'Local', 'taxa' => 0]);
         factory(App\City::class, 5)->create();
     }
 }

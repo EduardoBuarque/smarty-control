@@ -10,21 +10,16 @@
             </div>
         </div>
         <router-view></router-view>
-        <button @click="changeUserDb({ name: 'Alecio' })">Mudar nome</button>
     </div>
 </template>
 
 <script>
     import UserList from './user-list'
-    import { mapActions } from 'vuex'
 
     export default {
         data () {
             return { openModal: false }
         },
-        components: { UserList },
-        methods: {
-            ...mapActions(['changeUserDb']),
-        }
+        components: { UserList }
     }
 </script>

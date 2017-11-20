@@ -36,7 +36,8 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $result = Customer::create($request->all());
+        return response()->json($result);
     }
 
     /**
@@ -58,7 +59,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return response()->json($customer);
     }
 
     /**
@@ -70,7 +71,8 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $customer->update($request->all());
+        return response()->json($customer);
     }
 
     /**

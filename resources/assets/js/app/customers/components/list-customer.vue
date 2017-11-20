@@ -1,11 +1,14 @@
 <template>
     <div class="panel panel-default">
-        <div class="panel-heading">Clientes</div>
+        <div class="panel-heading">Clientes
+            <slot name="panel-heading"></slot>
+        </div>
 
         <div class="panel-body">
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Nome</th>
                         <th>Telefone</th>
                         <th>Cidade</th>
@@ -13,7 +16,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="customer in pagination.data">
-                        <td><router-link to="/bar">{{ customer.name }}</router-link></td>
+                        <td>
+                            <button v-on:click="toOrder(customer)" class="btn btn-xs btn-link">
+                                <i class="glyphicon glyphicon-shopping-cart"></i>
+                            </button>
+                        </td>
+                        <td><router-link :to="'customers/'+customer.id+'/edit'">{{ customer.name }}</router-link></td>
                         <td>{{ customer.phone }}</td>
                         <td>{{ customer.city.name }}</td>
                     </tr>
@@ -27,6 +35,8 @@
 </template>
 
 <script>
+
+    import { mapActions } from 'vuex'
     import ScPagination from '../../../components/sc-pagination'
 
     export default {
@@ -40,6 +50,11 @@
             this.getCustomers();
         },
         methods: {
+            ...mapActions(['addCustomerToOrder']),
+            toOrder (custumer) {
+                this.addCustomerToOrder(custumer)
+                this.$router.push('/orders')
+            },
             navigate (page) {
                 this.getCustomers(page)
             },
@@ -54,3 +69,9 @@
         }
     }
 </script>
+<style scoped>
+    .panel-heading {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
