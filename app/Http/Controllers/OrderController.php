@@ -20,7 +20,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with(['products', 'customer', 'user'])->get();
+        return response()->json($orders);
     }
 
     /**
@@ -43,16 +44,24 @@ class OrderController extends Controller
     {
         $order = new Order();
 
-        $order->user_id = Auth::user()->id;
         $customer = $request->customer;
-        $order->customer_id = $customer['id'];
+        if (!isset($customer['id'])) {
+            $customer = Customer::create([
+                'name' => $customer['name'],
+                'city_id' => 1
+            ]);
+            $customer['id'] = $customer->id;
+        }
 
-        $order->save();
+        $order->customer_id = $customer['id'];
+        $order->user_id = Auth::user()->id;
+
+        $reslt = $order->save();
         foreach ($request->products as $product) {
             $order->products()->attach($product['id'], ['quant' => $product['quant']]);
         }
 
-        return response()->json($order);
+        return response()->json($reslt);
     }
 
     /**

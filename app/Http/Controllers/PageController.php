@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
+use App\Page;
 use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $phone = $request->input('phone');
-
-        $customers = Customer::with('city')->where('phone', 'like', "%$phone%")->paginate(10);
-
-        return response()->json($customers);
+        //
     }
 
     /**
@@ -39,17 +35,16 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $result = Customer::create($request->all());
-        return response()->json($result);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show(Page $page)
     {
         //
     }
@@ -57,34 +52,33 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit(Page $page)
     {
-        return response()->json($customer);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Customer  $customer
+     * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Page $page)
     {
-        $customer->update($request->all());
-        return response()->json($customer);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Customer  $customer
+     * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(Page $page)
     {
         //
     }

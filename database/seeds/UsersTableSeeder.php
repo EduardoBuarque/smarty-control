@@ -23,6 +23,17 @@ class UsersTableSeeder extends Seeder
 
         $user->save();
 
+        $user = new User();
+
+        $user->name = 'Alécio2 Santana da Silva';
+        $user->email = 'alecio2santana@gmail.com';
+        $user->password = bcrypt('alecio2');
+        $user->account_status = 1;
+        $user->profile_id = 2;
+        $user->remember_token = str_random(10);
+
+        $user->save();
+
         factory(User::class, 50)->create();
     }
 }

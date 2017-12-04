@@ -1,6 +1,9 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">Clientes
+                <div class="form-group">
+                    <input type="text" v-on:keyup="filtraPhone" class="form-control form-group-sm" id="filterFone" placeholder="Filtrar Telefone">
+                </div>
             <slot name="panel-heading"></slot>
         </div>
 
@@ -42,7 +45,8 @@
     export default {
         data: function () {
             return {
-                pagination: []
+                pagination: [],
+                phone: ''
             }
         },
         components: { ScPagination },
@@ -56,15 +60,24 @@
                 this.$router.push('/orders')
             },
             navigate (page) {
-                this.getCustomers(page)
+                this.getCustomers(page, this.phone)
             },
-            getCustomers (page) {
+            filtraPhone(event) {
+                this.phone = event.target.value
+                this.getCustomers(null, this.phone)
+            },
+            getCustomers (page, phone) {
                 let url = '/customers'
+                if (page || phone)
+                    url += '?'
                 if (page)
-                    url+= '?page='+page
+                    url += 'page='+page
+                if (page && phone)
+                    url += '&'
+                if (phone)
+                    url += 'phone='+phone
 
-                this.$http.get(url).then(response =>
-                    this.pagination = response.data);
+                this.$http.get(url).then(response => this.pagination = response.data);
             },
         }
     }

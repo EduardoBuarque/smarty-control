@@ -40,26 +40,17 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
+                    @if (!Auth::guest())
                     <ul class="nav navbar-nav">
-                        <router-link to="/" tag="li" exact>
-                            <a>Home</a>
-                        </router-link>
-                        <router-link to="/orders" tag="li" exact>
-                            <a>Pedido</a>
-                        </router-link>
-                        <router-link to="/customers" tag="li" exact>
-                            <a>Clientes</a>
-                        </router-link>
-                        <router-link to="/users" tag="li" exact>
-                            <a>Usuários</a>
-                        </router-link>
-                        <router-link to="/products_categories" tag="li" exact>
-                            <a>Produtos e Categorias</a>
-                        </router-link>
-                        <router-link to="/bar" tag="li" exact>
-                            <a href="">Configuracões</a>
-                        </router-link>
+                        @foreach(Auth::user()->profile->pages as $page)
+
+                            <router-link to="{{ $page->router }}" tag="li" exact>
+                                <a>{{ $page->name }}</a>
+                            </router-link>
+
+                        @endforeach
                     </ul>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

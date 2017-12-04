@@ -6,7 +6,7 @@
             </div>
             <div class="col-md-5">
                 <div id="myAffix">
-                    <list-order></list-order>
+                    <new-order></new-order>
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
 
 <script>
     import ListProduct from './list-product'
-    import ListOrder from './list-order.vue'
+    import NewOrder from './new-order.vue'
 
     export default {
         data () {
@@ -23,7 +23,7 @@
                 categories: []
             }
         },
-        components: { ListProduct, ListOrder },
+        components: { ListProduct, NewOrder },
         created() {
             this.getCategories();
         },

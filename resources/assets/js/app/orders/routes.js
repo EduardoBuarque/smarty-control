@@ -1,11 +1,11 @@
 import Main from './components/main';
-import NewCategory from './components/new-category'
+import ListOrder from './components/list-order'
 
 export default [
     {
-        path: '/orders', component: Main,
-        children: [
-            { path: 'categories/new', component: NewCategory }
-        ]
+        path: '/orders', component: Main
+    },
+    {
+        path: '/listOrder', component: ListOrder
     }
 ]

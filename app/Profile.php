@@ -12,4 +12,9 @@ class Profile extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function pages()
+    {
+        return $this->belongsToMany(Page::class);
+    }
 }
